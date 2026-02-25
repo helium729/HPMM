@@ -32,12 +32,86 @@ The designs were implemented and synthesized using **Vivado 2024.2** on a Xilinx
 
 ```text
 ├── src/
-│   ├── multiplier_kyber/    # Full Modular Multiplier for Kyber (based on Yaman's PE)
-│   └── reduction_falcon/    # K-LUT Reduction Unit adapted for Falcon
-├── tb/						 # testbench
-├── test-data/
+│   ├── high-performance-multiplier/    # High-performance Kyber multiplier (4-PE)
+│   ├── lightweight-multiplier/         # Lightweight Kyber multiplier (1-PE)
+│   └── reduction-falcon/               # K-LUT reduction unit for Falcon
+├── tb/                                 # Simulation testbenches
+├── test-data/                          # Reference vectors
 └── README.md
 ```
+
+## Functional Description
+
+This project provides two independent hardware IP cores and one reduction primitive:
+
+### 1. Kyber Modular Multiplier (High-Performance — 4-PE)
+
+`src/high-performance-multiplier/` implements a **4 Processing Element** polynomial multiplier for the Kyber (ML-KEM) scheme. Each PE handles one 12-bit coefficient pair per cycle, giving a throughput of 4 coefficients/cycle. It supports three hardware-controlled operations triggered by a single-cycle strobe signal:
+
+| Operation | Signal | Description |
+|:----------|:-------|:------------|
+| Forward NTT | `start_fntt` | Transforms coefficients into the NTT domain |
+| Pointwise Mul | `start_pwm2` | Coefficient-wise multiplication in NTT domain |
+| Inverse NTT | `start_intt` | Transforms back and outputs final product |
+
+A full polynomial multiplication (256-point NTT × NTT → PWM → INTT) completes automatically; the `done` signal pulses for one cycle upon completion.
+
+### 2. Kyber Modular Multiplier (Lightweight — 1-PE)
+
+`src/lightweight-multiplier/` is the area-minimal variant using a **single PE**. It exposes the same interface as the 4-PE version (drop-in compatible signals), but processes one coefficient pair per cycle at lower throughput. This is the design that achieves **49 LUTs + 1 DSP** at 331 MHz.
+
+### 3. Falcon K-LUT Reduction Unit
+
+`src/reduction-falcon/` provides:
+- **`falcon_KRED`**: A 2-stage pipelined modular multiplier for $q = 12289$ using the K-LUT technique. Computes $(-3 \cdot a \cdot b) \bmod q$; the implicit $-3$ factor is absorbed into pre-computed twiddle factors ($W' = W \cdot (-3)^{-1} \bmod q$, where $(-3)^{-1} \bmod 12289 = 4096$).
+- **`butterfly_falcon_kred`**: A complete CT/GS butterfly unit integrating `falcon_KRED` for full NTT on 1024-coefficient Falcon polynomials.
+
+---
+
+## Installation
+
+### Prerequisites
+
+| Tool | Version | Notes |
+|:-----|:--------|:------|
+| Xilinx Vivado | 2024.2 (recommended) | Synthesis, implementation & simulation |
+| Target FPGA | Artix-7 `xc7a200tffg1156-3` | Or compatible Artix-7 device |
+
+> Vivado can be downloaded from [AMD/Xilinx Download Center](https://www.xilinx.com/support/download.html). A free WebPACK license is sufficient for Artix-7 synthesis.
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/Kyrie-T/HPMM.git
+cd HPMM
+```
+
+### Add Sources to Vivado
+
+1. Launch Vivado and create a new **RTL Project**.
+2. In the *Add Sources* dialog, add all `.v` files from the desired `src/` sub-directory.
+3. Set the top-level module:
+   - For 4-PE Kyber: `KyberHPM4PE_top`
+   - For 1-PE Kyber: `KyberHPM1PE_top`
+   - For Falcon reduction only: `falcon_KRED` or `butterfly_falcon_kred`
+4. Set the target part to `xc7a200tffg1156-3` (or your device).
+
+---
+
+## Usage
+
+### Running Testbenches (Simulation)
+
+All testbenches in `tb/` are self-checking and print `PASS` / `FAIL` to the console. Reference data is loaded from `test-data/` via `$readmemh`.
+
+**In Vivado Simulator:**
+
+1. Add the chosen testbench `.v` from `tb/` as a simulation source.
+2. Add the corresponding `src/` RTL files.
+3. Run behavioral simulation (`Run Simulation → Run Behavioral Simulation`).
+4. Observe the console output for test results.
+
+---
 
 ## Technical Details
 
