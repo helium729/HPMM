@@ -12,7 +12,7 @@ module KyberHPM1PE_top #(parameter PE_NUMBER=1)
                );
 
 // Connections
-//将输入信号进行延迟寄存，同时通过 wire 连接内部模块的输出和顶层模块的输出信号
+// Delay and register input control/data signals, then connect to internal submodules via wires.
 reg                     load_a_f_R,load_a_i_R;
 reg                     load_b_f_R,load_b_i_R;
 reg                     read_a_R,read_b_R;

@@ -13,24 +13,24 @@
 // endmodule
 
 module modadd #(
-    parameter LOGQ       = 12,            // 数据位宽为 12 位（对应 12 位输入输出）
-    parameter [LOGQ:0] Q_VALUE = 13'd3329 // 固定模数为 3329（需 13 位存储）
+    parameter LOGQ       = 12,            // Bit width of input/output operands
+    parameter [LOGQ:0] Q_VALUE = 13'd3329 // Fixed modulus 3329 stored in 13 bits
 ) (
-    input  [LOGQ-1:0] a,   // 输入 a（12 位）
-    input  [LOGQ-1:0] b,   // 输入 b（12 位）
-    output [LOGQ-1:0] c    // 输出 c（12 位）
+    input  [LOGQ-1:0] a,   // Input a (12-bit when LOGQ=12)
+    input  [LOGQ-1:0] b,   // Input b (12-bit when LOGQ=12)
+    output [LOGQ-1:0] c    // Output c (12-bit when LOGQ=12)
 );
 
 // ------------------------------------------
-// 组合逻辑实现（无时钟和寄存器）
+// Combinational logic (no clock/register)
 // ------------------------------------------
-wire [LOGQ:0]   madd;      // 临时加法结果（13 位）
-wire signed [LOGQ+1:0] madd_q; // 模减后的有符号结果（14 位）
+wire [LOGQ:0]   madd;      // Intermediate sum (13-bit)
+wire signed [LOGQ+1:0] madd_q; // Sum minus modulus (signed 14-bit)
 
-assign madd = a + b;                // 计算 a + b（13 位）
-assign madd_q = madd - Q_VALUE;     // 减去模数 3329（14 位有符号数）
+assign madd = a + b;                // Compute a + b
+assign madd_q = madd - Q_VALUE;     // Subtract modulus 3329
 
-// 结果选择：若 madd_q 非负，取低 12 位；否则保留加法结果
+// If madd_q is non-negative, use reduced value; otherwise keep raw sum
 assign c = (madd_q[LOGQ+1] == 0) ? madd_q[LOGQ-1:0] : madd[LOGQ-1:0];
 
 endmodule
@@ -44,8 +44,8 @@ endmodule
 //    output [LOGQ-1:0] c
 //);
 
-//wire [LOGQ:0] madd = a + b;            // 单一加法
+//wire [LOGQ:0] madd = a + b;            // first adder
 //wire [LOGQ:0] sub_result = (madd >= Q_VALUE) ? madd - Q_VALUE : madd;
-//assign c = sub_result[LOGQ-1:0];       // 取低 12 位
+//assign c = sub_result[LOGQ-1:0];       // take lower 12 bits
 
 //endmodule

@@ -17,7 +17,7 @@ reg                     load_b_f,load_b_i;
 reg                     read_a,read_b;
 reg                     start_ab;
 reg                     start_fntt,start_pwm2,start_intt;
-reg                     start_pos; // ×¢ÒâÌí¼ÓË³Ğò
+reg                     start_pos; // note startup sequence
 reg  [12*PE_NUMBER-1:0] din;
 wire [12*PE_NUMBER-1:0] dout;
 wire                    done;

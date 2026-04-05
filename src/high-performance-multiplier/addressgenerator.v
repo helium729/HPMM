@@ -431,24 +431,24 @@ wire [7:0] raddr_twd0;
 // shiftreg #(.SHIFT(2),.DATA(3)) sre11(clk,reset,c_pwm  ,stage_count_pwmd0);
 // shiftreg #(.SHIFT(1),.DATA(8)) sre12(clk,reset,c_tw   ,raddr_twd0);
 
-// k-red    加两个寄存器 bertels
- shiftreg #(.SHIFT(1),.DATA(1)) sre00(clk,reset,b_ct   ,ctd0);   // 不要改
+// k-red    add two pipeline registers bertels
+ shiftreg #(.SHIFT(1),.DATA(1)) sre00(clk,reset,b_ct   ,ctd0);   // do not modify
  shiftreg #(.SHIFT(1),.DATA(1)) sre01(clk,reset,b_pwm  ,pwmd0);
- shiftreg #(.SHIFT(7),.DATA(8)) sre02(clk,reset,waddre ,waddrd0); // 不动
- shiftreg #(.SHIFT(8),.DATA(8)) sre03(clk,reset,waddro ,waddrd1); // 不动
- shiftreg #(.SHIFT(7),.DATA(1)) sre04(clk,reset,wen    ,wend0); // 不动
- shiftreg #(.SHIFT(8),.DATA(1)) sre05(clk,reset,wen    ,wend1); // 不动
- shiftreg #(.SHIFT(7),.DATA(1)) sre06(clk,reset,brsel  ,brseld0); // 不动
- shiftreg #(.SHIFT(8),.DATA(1)) sre07(clk,reset,brsel  ,brseld1); // 不动
- shiftreg #(.SHIFT(7),.DATA(1)) sre08(clk,reset,brselen,brselend0); // 不动
- shiftreg #(.SHIFT(8),.DATA(1)) sre09(clk,reset,brselen,brselend1); // 不动
- shiftreg #(.SHIFT(8),.DATA(3)) sre10(clk,reset,c_stage,stage_countd0); // 不动
+ shiftreg #(.SHIFT(7),.DATA(8)) sre02(clk,reset,waddre ,waddrd0); // unchanged
+ shiftreg #(.SHIFT(8),.DATA(8)) sre03(clk,reset,waddro ,waddrd1); // unchanged
+ shiftreg #(.SHIFT(7),.DATA(1)) sre04(clk,reset,wen    ,wend0); // unchanged
+ shiftreg #(.SHIFT(8),.DATA(1)) sre05(clk,reset,wen    ,wend1); // unchanged
+ shiftreg #(.SHIFT(7),.DATA(1)) sre06(clk,reset,brsel  ,brseld0); // unchanged
+ shiftreg #(.SHIFT(8),.DATA(1)) sre07(clk,reset,brsel  ,brseld1); // unchanged
+ shiftreg #(.SHIFT(7),.DATA(1)) sre08(clk,reset,brselen,brselend0); // unchanged
+ shiftreg #(.SHIFT(8),.DATA(1)) sre09(clk,reset,brselen,brselend1); // unchanged
+ shiftreg #(.SHIFT(8),.DATA(3)) sre10(clk,reset,c_stage,stage_countd0); // unchanged
  shiftreg #(.SHIFT(2),.DATA(3)) sre11(clk,reset,c_pwm,  stage_count_pwmd0);
  shiftreg #(.SHIFT(2),.DATA(7)) sre12(clk,reset,c_loop ,c_loop_pwmd0);
- shiftreg #(.SHIFT(1),.DATA(7)) sre13(clk,reset,raddr_b_w,raddr_b_wd0); // 不动
- shiftreg #(.SHIFT(1),.DATA(9)) sre14(clk,reset,c_tw   ,raddr_twd0); // 不动
+ shiftreg #(.SHIFT(1),.DATA(7)) sre13(clk,reset,raddr_b_w,raddr_b_wd0); // unchanged
+ shiftreg #(.SHIFT(1),.DATA(9)) sre14(clk,reset,c_tw   ,raddr_twd0); // unchanged
 
-// xing    barret 加四个寄存器
+// xing    barret add four pipeline registers
 // shiftreg #(.SHIFT(1),.DATA(1)) sre00(clk,reset,b_ct   ,ctd0);
 // shiftreg #(.SHIFT(1),.DATA(1)) sre01(clk,reset,b_pwm  ,pwmd0);
 // shiftreg #(.SHIFT(9),.DATA(6)) sre02(clk,reset,waddre ,waddrd0);
