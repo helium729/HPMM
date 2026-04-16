@@ -4,15 +4,15 @@
 
 This repository provides an ultra-low-area hardware implementation of modular reduction and multiplication for Post-Quantum Cryptography (PQC) schemes.
 
-Based on the novel **K-LUT reduction** technique proposed by *Bertels et al. (2024)* in "A Better Kyber Butterfly for FPGAs", this project achieves the smallest reported area for the Kyber modular multiplier. Furthermore, we bridge the gap between academic theory and engineering by:
+Based on the novel **LUT-K reduction** technique proposed by *Bertels et al. (2024)* in "A Better Kyber Butterfly for FPGAs", this project achieves the smallest reported area for the Kyber modular multiplier. Furthermore, we bridge the gap between academic theory and engineering by:
 
 1.  **Completing the Architecture**: Extending the original butterfly-only design into a full modular multiplier Processing Element (PE), integrated into the architecture of *Yaman et al.*.
-2.  **Algorithm Portability**: Successfully porting the K-LUT reduction technique to the **Falcon** signature scheme, demonstrating the method's versatility.
+2.  **Algorithm Portability**: Successfully porting the LUT-K reduction technique to the **Falcon** signature scheme, demonstrating the method's versatility.
 
 ## Key Features
 
 - **Minimal Area (Kyber)**: Achieves **49 LUTs** and **1 DSP** for the modular multiplier, utilizing the hybrid K-reduction and LUT-based reduction strategy.
-- **High Performance (Falcon)**: Optimized K-LUT reduction for Falcon achieves **291 MHz** on Artix-7.
+- **High Performance (Falcon)**: Optimized LUT-K reduction for Falcon achieves **291 MHz** on Artix-7.
 - **Robust Verification**: Includes comprehensive testbenches covering all possible twiddle factors and input ranges to ensure 100% computational accuracy.
 
 ![image-20260206210733433](./assets/image-20260206210733433.png)
@@ -34,7 +34,7 @@ The designs were implemented and synthesized using **Vivado 2024.2** on a Xilinx
 ├── src/
 │   ├── high-performance-multiplier/    # High-performance Kyber multiplier (4-PE)
 │   ├── lightweight-multiplier/         # Lightweight Kyber multiplier (1-PE)
-│   └── reduction-falcon/               # K-LUT reduction unit for Falcon
+│   └── reduction-falcon/               # LUT-K reduction unit for Falcon
 ├── tb/                                 # Simulation testbenches
 ├── test-data/                          # Reference vectors
 └── README.md
@@ -60,10 +60,10 @@ A full polynomial multiplication (256-point NTT × NTT → PWM → INTT) complet
 
 `src/lightweight-multiplier/` is the area-minimal variant using a **single PE**. It exposes the same interface as the 4-PE version (drop-in compatible signals), but processes one coefficient pair per cycle at lower throughput. This is the design that achieves **49 LUTs + 1 DSP** at 331 MHz.
 
-### 3. Falcon K-LUT Reduction Unit
+### 3. Falcon LUT-K Reduction Unit
 
 `src/reduction-falcon/` provides:
-- **`falcon_KRED`**: A 2-stage pipelined modular multiplier for $q = 12289$ using the K-LUT technique. Computes $(-3 \cdot a \cdot b) \bmod q$; the implicit $-3$ factor is absorbed into pre-computed twiddle factors ($W' = W \cdot (-3)^{-1} \bmod q$, where $(-3)^{-1} \bmod 12289 = 4096$).
+- **`falcon_KRED`**: A 2-stage pipelined modular multiplier for $q = 12289$ using the LUT-K technique. Computes $(-3 \cdot a \cdot b) \bmod q$; the implicit $-3$ factor is absorbed into pre-computed twiddle factors ($W' = W \cdot (-3)^{-1} \bmod q$, where $(-3)^{-1} \bmod 12289 = 4096$).
 - **`butterfly_falcon_kred`**: A complete CT/GS butterfly unit integrating `falcon_KRED` for full NTT on 1024-coefficient Falcon polynomials.
 
 ---
@@ -115,7 +115,7 @@ All testbenches in `tb/` are self-checking and print `PASS` / `FAIL` to the cons
 
 ## Technical Details
 
-### The K-LUT Reduction Technique
+### The LUT-K Reduction Technique
 
 Modular reduction is often the bottleneck in Lattice-based cryptography. This project leverages the specific structure of PQC moduli ($q = k \cdot 2^x + 1$) to perform efficient reduction:
 
