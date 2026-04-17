@@ -15,7 +15,10 @@ Based on the novel **LUT-K reduction** technique proposed by *Bertels et al. (20
 - **High Performance (Falcon)**: Optimized LUT-K reduction for Falcon achieves **291 MHz** on Artix-7.
 - **Robust Verification**: Includes comprehensive testbenches covering all possible twiddle factors and input ranges to ensure 100% computational accuracy.
 
-![image-20260206210733433](./assets/image-20260206210733433.png)
+<p align="center">
+   <img src="./assets/image-20260206210733433.png" alt="Implemented and synthesized results" />
+</p>
+<p align="center"><em>Figure 1. Implemented and synthesized results on Artix-7 in Vivado 2024.2.</em></p>
 
 ## Performance & Resource Utilization
 
@@ -26,7 +29,10 @@ The designs were implemented and synthesized using **Vivado 2024.2** on a Xilinx
 | **Kyber (ML-KEM)**  | **331 MHz**           | **49** | **32** | **1** | 3329          | $13 \cdot 2^8 + 1$            |
 | **Falcon (FN-DSA)** | **291 MHz**           | **58** | **38** | **1** | 12289         | $3 \cdot 2^{12} + 1$          |
 
-![image-20260206210657204](./assets/image-20260206210657204.png)
+<p align="center">
+   <img src="./assets/image-20260206210657204.png" alt="Falcon LUT-K simulation results" />
+</p>
+<p align="center"><em>Figure 2. Simulation results of the LUT-K reduction architecture for Falcon.</em></p>
 
 ## Project Structure
 
@@ -122,13 +128,15 @@ Modular reduction is often the bottleneck in Lattice-based cryptography. This pr
 1. **LUT-based Reduction**: Uses FPGA primitives (LUT-6) to pre-calculate reduction for high-order bits.
 2. **K-Reduction**: Exploits the property $k \cdot 2^x \equiv -1 \pmod q$ to strictly bound the result.
 
-![LUT-K Hardware Architecture](./assets/NTT_Kyber-LUT-K.drawio.svg)
+<p align="center">
+   <img src="./assets/NTT_Kyber-LUT-K.drawio.svg" alt="LUT-K hardware architecture" />
+</p>
+<p align="center"><em>Figure 3. LUT-K reduction hardware structure used in the Kyber NTT datapath.</em></p>
 
-*Figure 1. LUT-K reduction hardware structure used in the Kyber NTT datapath.*
-
-![Unified Butterfly Hardware Architecture](./assets/NTT_Kyber-unified-butterfly-no-box.drawio.svg)
-
-*Figure 2. Unified butterfly hardware structure for Kyber NTT/INTT operations.*
+<p align="center">
+   <img src="./assets/NTT_Kyber-unified-butterfly-no-box.drawio.svg" alt="Unified butterfly hardware architecture" />
+</p>
+<p align="center"><em>Figure 4. Unified butterfly hardware structure for Kyber NTT/INTT operations.</em></p>
 
 ### Adaptation for Falcon
 
