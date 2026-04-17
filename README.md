@@ -122,6 +122,14 @@ Modular reduction is often the bottleneck in Lattice-based cryptography. This pr
 1. **LUT-based Reduction**: Uses FPGA primitives (LUT-6) to pre-calculate reduction for high-order bits.
 2. **K-Reduction**: Exploits the property $k \cdot 2^x \equiv -1 \pmod q$ to strictly bound the result.
 
+![LUT-K Hardware Architecture](./assets/NTT_Kyber-LUT-K.drawio.svg)
+
+*Figure 1. LUT-K reduction hardware structure used in the Kyber NTT datapath.*
+
+![Unified Butterfly Hardware Architecture](./assets/NTT_Kyber-unified-butterfly-no-box.drawio.svg)
+
+*Figure 2. Unified butterfly hardware structure for Kyber NTT/INTT operations.*
+
 ### Adaptation for Falcon
 
 We extended the technique to the Falcon algorithm by adapting the parameters to its specific modulus:
